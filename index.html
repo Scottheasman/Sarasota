@@ -4,295 +4,334 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Florida Day Trip Planner</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       min-height: 100vh;
       background: linear-gradient(135deg, #0f1923 0%, #1a2d40 50%, #0f1923 100%);
-      font-family: 'Inter', 'Helvetica Neue', sans-serif;
+      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
       color: #e8edf2;
+      padding: 32px 16px;
     }
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button { opacity: 1; }
-    input[type=time]::-webkit-calendar-picker-indicator { filter: invert(1); }
+    #app { max-width: 560px; margin: 0 auto; }
+
+    .header { text-align: center; margin-bottom: 24px; }
+    .header-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #4fc3f7; margin-bottom: 8px; font-weight: 600; }
+    .header h1 { font-size: 26px; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+
+    .toolbar {
+      display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .tool-btn {
+      flex: 1; min-width: 120px; padding: 9px 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; color: #90a4ae; font-size: 12px;
+      cursor: pointer; font-family: inherit; transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .tool-btn:hover { background: rgba(255,255,255,0.09); color: #e0e0e0; border-color: rgba(255,255,255,0.2); }
+    .tool-btn.danger:hover { background: rgba(239,83,80,0.1); color: #ef5350; border-color: rgba(239,83,80,0.3); }
+    .tool-btn.refresh:hover { background: rgba(79,195,247,0.1); color: #4fc3f7; border-color: rgba(79,195,247,0.3); }
+
+    .depart-box {
+      background: rgba(79,195,247,0.08);
+      border: 1px solid rgba(79,195,247,0.25);
+      border-radius: 14px; padding: 16px 20px; margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .depart-label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #4fc3f7; font-weight: 600; margin-bottom: 4px; }
+    .depart-time { font-size: 22px; font-weight: 700; color: #fff; }
+    input[type="time"] {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px; padding: 8px 12px; color: #fff; font-size: 15px;
+      cursor: pointer; outline: none;
+    }
+    input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+
+    .stop-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px; padding: 14px 16px; position: relative;
+    }
+    .stop-card.origin { background: rgba(79,195,247,0.06); border-color: rgba(79,195,247,0.2); }
+    .stop-row { display: flex; align-items: center; gap: 14px; }
+    .stop-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .stop-card.origin .stop-icon { background: rgba(79,195,247,0.15); }
+    .stop-info { flex: 1; min-width: 0; }
+    .stop-num { font-size: 10px; color: #546e7a; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2px; }
+    .stop-label {
+      background: transparent; border: none; color: #ecf0f1;
+      font-size: 13px; font-weight: 500; outline: none; width: 100%; padding: 0;
+      font-family: inherit;
+    }
+    .stop-times { text-align: right; flex-shrink: 0; }
+    .time-label { font-size: 10px; color: #546e7a; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2px; }
+    .time-value { font-size: 18px; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+    .stop-card.origin .time-value { color: #4fc3f7; }
+    .leave-time { font-size: 11px; color: #f59e0b; margin-top: 2px; }
+
+    .remove-btn {
+      position: absolute; top: 8px; right: 8px;
+      background: transparent; border: none; color: #37474f;
+      cursor: pointer; font-size: 14px; padding: 2px; line-height: 1;
+    }
+    .remove-btn:hover { color: #ef5350; }
+
+    .wait-row {
+      margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .wait-label { font-size: 12px; color: #546e7a; }
+    .wait-input-wrap {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.04); border: 1px solid transparent;
+      border-radius: 20px; padding: 3px 10px; transition: all 0.2s;
+    }
+    .wait-input-wrap.active { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.25); }
+    .wait-input {
+      background: transparent; border: none; color: #78909c;
+      font-size: 12px; width: 36px; text-align: center; outline: none; font-family: inherit;
+    }
+    .wait-input-wrap.active .wait-input { color: #f59e0b; }
+    .wait-unit { font-size: 11px; color: #546e7a; }
+    .wait-input-wrap.active .wait-unit { color: #f59e0b; }
+
+    /* Notes */
+    .note-row {
+      margin-top: 8px;
+      display: flex; align-items: flex-start; gap: 6px;
+    }
+    .note-icon { font-size: 11px; margin-top: 1px; flex-shrink: 0; }
+    .note-text { font-size: 11px; color: #78909c; line-height: 1.4; }
+    .note-link {
+      color: #4fc3f7; text-decoration: none; font-size: 11px;
+      border-bottom: 1px solid rgba(79,195,247,0.3);
+    }
+    .note-link:hover { color: #81d4fa; border-bottom-color: #81d4fa; }
+
+    .connector { display: flex; align-items: center; gap: 10px; padding: 4px 0; margin-left: 40px; }
+    .connector-line {
+      width: 2px; min-height: 24px; align-self: stretch;
+      background: linear-gradient(to bottom, rgba(79,195,247,0.3), rgba(79,195,247,0.1));
+      border-radius: 2px; flex-shrink: 0;
+    }
+    .drive-pill {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.04); border-radius: 20px; padding: 4px 12px; font-size: 12px;
+    }
+    .drive-input {
+      background: transparent; border: none; color: #b0bec5;
+      font-size: 12px; width: 36px; text-align: center; outline: none; font-family: inherit;
+    }
+    .drive-unit { color: #546e7a; font-size: 11px; }
+    .drive-fmt { color: #4fc3f7; font-size: 11px; font-weight: 600; }
+
+    .add-btn {
+      width: 100%; margin-top: 16px; padding: 12px;
+      background: transparent; border: 1px dashed rgba(255,255,255,0.12);
+      border-radius: 12px; color: #546e7a; font-size: 13px; cursor: pointer; font-family: inherit;
+    }
+    .add-btn:hover { border-color: rgba(79,195,247,0.3); color: #4fc3f7; }
+
+    .summary {
+      margin-top: 24px; padding: 14px 20px;
+      background: rgba(255,255,255,0.03); border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.06);
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+      font-size: 12px; color: #546e7a;
+    }
+    .summary strong { color: #b0bec5; }
+    .summary .done { color: #4fc3f7; }
+    .summary .wait-total { color: #f59e0b; }
+
+    /* Refresh spin animation */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinning { display: inline-block; animation: spin 0.6s linear; }
   </style>
 </head>
 <body>
-  <div id="root"></div>
-  <script type="text/babel">
-    const { useState } = React;
+<div id="app"></div>
+<script>
+  var DEFAULT_STOPS = [
+    { id: 0, label: "Home",                                       travel: 0,  wait: 0, icon: "🏠", origin: true,  note: null },
+    { id: 1, label: "Miccosukee Service Plaza – Alligator Alley", travel: 50, wait: 0, icon: "🐊", note: null },
+    { id: 2, label: "Tesla Supercharger – Miromar Outlets",       travel: 65, wait: 0, icon: "⚡", note: null },
+    { id: 3, label: "Wellen Park Farmers Market",                 travel: 70, wait: 0, icon: "🌿",
+      note: { text: "Open 9am – 1pm", url: "https://wellenpark.com/events/fresh-harvest-farmers-market/" } },
+    { id: 4, label: "Taylor Morrison – Skye Ranch",               travel: 35, wait: 0, icon: "🏡", note: null },
+    { id: 5, label: "Waterside Farmers Market",                   travel: 26, wait: 0, icon: "🥕",
+      note: { text: "Open 11am – 2pm", url: "https://lakewoodranch.com/life-on-the-ranch/themarket/" } },
+    { id: 6, label: "Art Ovation Hotel",                          travel: 26, wait: 0, icon: "🎨",
+      note: { text: "Check-in from 4pm", url: "https://www.marriott.com/search/findHotels.mi?pageType=advanced&searchType=InCity&destinationAddress.latitude=27.336553&destinationAddress.longitude=-82.544847&destinationAddress.destination=Art+Ovation+Hotel+Autograph+Collection&nst=paid&cid=PAI_GLB0004YXD_GLE000BIM5_GLF000OETA&ppc=ppc&pId=ustbppc&gclsrc=aw.ds&gad_source=1&gad_campaignid=1658413573&gbraid=0AAAAADilnidrXYeNNxdkN67EbfvFvIKBq&gclid=CjwKCAjw9NjRBhATEiwA_p2J8clchucJLcykdWrPAORJqFP-7ViLeOug2_S2vufDTLIQvMb-gvMtEhoCbIEQAvD_BwE" } },
+  ];
 
-    const initialStops = [
-      { id: 0, label: "Home", travel: 0, wait: 0, icon: "🏠", isOrigin: true },
-      { id: 1, label: "Miccosukee Service Plaza – Alligator Alley", travel: 50, wait: 0, icon: "🐊" },
-      { id: 2, label: "Tesla Supercharger – Miromar Outlets", travel: 65, wait: 0, icon: "⚡" },
-      { id: 3, label: "Wellen Park Farmers Market", travel: 70, wait: 0, icon: "🌿" },
-      { id: 4, label: "Taylor Morrison – Skye Ranch", travel: 35, wait: 0, icon: "🏡" },
-      { id: 5, label: "Lakewood Ranch Farmers Market", travel: 26, wait: 0, icon: "🥕" },
-      { id: 6, label: "Art Ovation Hotel", travel: 26, wait: 0, icon: "🎨" },
-    ];
+  function deepClone(arr) { return JSON.parse(JSON.stringify(arr)); }
 
-    function toMinutes(hhmm) {
-      const [h, m] = hhmm.split(":").map(Number);
-      return h * 60 + m;
-    }
+  var stops = deepClone(DEFAULT_STOPS);
+  var departMins = 7 * 60;
 
-    function toDisplay(totalMins) {
-      const h = Math.floor(totalMins / 60) % 24;
-      const m = totalMins % 60;
-      const ampm = h >= 12 ? "pm" : "am";
-      const displayH = h % 12 === 0 ? 12 : h % 12;
-      return `${displayH}:${String(m).padStart(2, "0")}${ampm}`;
-    }
+  function toMins(hhmm) { var p = hhmm.split(":"); return +p[0]*60 + +p[1]; }
+  function toDisplay(m) {
+    var h = Math.floor(m/60)%24, min = m%60;
+    var ampm = h>=12?"pm":"am", dh = h%12===0?12:h%12;
+    return dh+":"+String(min).padStart(2,"0")+ampm;
+  }
+  function toInputVal(m) {
+    var h = Math.floor(m/60)%24, min = m%60;
+    return String(h).padStart(2,"0")+":"+String(min).padStart(2,"0");
+  }
+  function fmtDur(m) {
+    if (!m) return "";
+    if (m<60) return m+" min";
+    var h=Math.floor(m/60), r=m%60;
+    return r===0?h+" hr":h+" hr "+r+" min";
+  }
 
-    function toInputValue(totalMins) {
-      const h = Math.floor(totalMins / 60) % 24;
-      const m = totalMins % 60;
-      return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
-    }
+  function calcTimes() {
+    var arrivals=[], departures=[];
+    stops.forEach(function(stop,i){
+      if(i===0){ arrivals.push(departMins); departures.push(departMins+(stop.wait||0)); }
+      else { var arr=departures[i-1]+stop.travel; arrivals.push(arr); departures.push(arr+(stop.wait||0)); }
+    });
+    return {arrivals:arrivals, departures:departures};
+  }
 
-    function formatDuration(mins) {
-      if (!mins) return null;
-      if (mins < 60) return `${mins} min`;
-      const h = Math.floor(mins / 60);
-      const m = mins % 60;
-      return m === 0 ? `${h} hr` : `${h} hr ${m} min`;
-    }
+  function escQ(s) { return s.replace(/"/g,'&quot;'); }
 
-    function TripPlanner() {
-      const [stops, setStops] = useState(initialStops);
-      const [departureMins, setDepartureMins] = useState(7 * 60);
+  function render() {
+    var times = calcTimes();
+    var arrivals = times.arrivals, departures = times.departures;
+    var totalDrive = stops.slice(1).reduce(function(s,st){return s+st.travel;},0);
+    var totalWait  = stops.reduce(function(s,st){return s+(st.wait||0);},0);
 
-      const { arrivals, departures } = stops.reduce(
-        (acc, stop, i) => {
-          if (i === 0) {
-            acc.arrivals.push(departureMins);
-            acc.departures.push(departureMins + (stop.wait || 0));
-          } else {
-            const arrive = acc.departures[i - 1] + stop.travel;
-            acc.arrivals.push(arrive);
-            acc.departures.push(arrive + (stop.wait || 0));
-          }
-          return acc;
-        },
-        { arrivals: [], departures: [] }
-      );
+    var html = '<div class="header"><div class="header-label">Road Trip Planner</div><h1>Florida Day Trip</h1></div>';
 
-      function handleTravelChange(idx, val) {
-        setStops(prev => prev.map((s, i) => i === idx ? { ...s, travel: Math.max(1, parseInt(val) || 1) } : s));
+    // Toolbar
+    html += '<div class="toolbar">'
+      + '<button class="tool-btn danger" id="clear-waits">🧹 Clear Wait Times</button>'
+      + '<button class="tool-btn refresh" id="refresh-btn">↺ Reset to Default</button>'
+      + '</div>';
+
+    // Departure
+    html += '<div class="depart-box">'
+      + '<div><div class="depart-label">Departure Time</div>'
+      + '<div class="depart-time">'+toDisplay(departMins)+'</div></div>'
+      + '<input type="time" id="depart-input" value="'+toInputVal(departMins)+'">'
+      + '</div>';
+
+    // Stops
+    stops.forEach(function(stop,i){
+      var hasWait = (stop.wait||0)>0;
+      var isLast  = i===stops.length-1;
+
+      if(i>0){
+        html += '<div class="connector"><div class="connector-line"></div>'
+          +'<div class="drive-pill">🚗 '
+          +'<input class="drive-input" type="number" min="1" data-idx="'+i+'" data-field="travel" value="'+stop.travel+'">'
+          +'<span class="drive-unit">min drive</span>'
+          +'<span class="drive-fmt">'+fmtDur(stop.travel)+'</span>'
+          +'</div></div>';
       }
-      function handleWaitChange(idx, val) {
-        setStops(prev => prev.map((s, i) => i === idx ? { ...s, wait: Math.max(0, parseInt(val) || 0) } : s));
+
+      html += '<div class="stop-card'+(stop.origin?' origin':'')+'">';
+      html += '<div class="stop-row">';
+      html += '<div class="stop-icon">'+stop.icon+'</div>';
+      html += '<div class="stop-info">'
+        +'<div class="stop-num">'+(stop.origin?'Start':'Stop '+i)+'</div>'
+        +'<input class="stop-label" type="text" data-idx="'+i+'" data-field="label" value="'+escQ(stop.label)+'">'
+        +'</div>';
+      html += '<div class="stop-times">'
+        +'<div class="time-label">'+(stop.origin?'Depart':'Arrive')+'</div>'
+        +'<div class="time-value">'+toDisplay(arrivals[i])+'</div>'
+        +(hasWait&&!stop.origin?'<div class="leave-time">Leave '+toDisplay(departures[i])+'</div>':'')
+        +'</div>';
+      html += '</div>'; // stop-row
+
+      // Note
+      if(stop.note){
+        html += '<div class="note-row">'
+          +'<span class="note-icon">ℹ️</span>'
+          +'<span class="note-text">'+stop.note.text
+          +' — <a class="note-link" href="'+stop.note.url+'" target="_blank" rel="noopener">More info ↗</a>'
+          +'</span></div>';
       }
-      function handleLabelChange(idx, val) {
-        setStops(prev => prev.map((s, i) => i === idx ? { ...s, label: val } : s));
-      }
-      function addStop() {
-        setStops(prev => [...prev, { id: Date.now(), label: "New Stop", travel: 30, wait: 0, icon: "📍" }]);
-      }
-      function removeStop(idx) {
-        setStops(prev => prev.filter((_, i) => i !== idx));
+
+      if(i>0){
+        html += '<button class="remove-btn" data-idx="'+i+'" data-action="remove">✕</button>';
       }
 
-      const totalDrive = stops.slice(1).reduce((s, st) => s + st.travel, 0);
-      const totalWait = stops.reduce((s, st) => s + (st.wait || 0), 0);
+      if(!isLast){
+        html += '<div class="wait-row">'
+          +'<span class="wait-label">⏱ Time at stop:</span>'
+          +'<div class="wait-input-wrap'+(hasWait?' active':'')+'">'
+          +'<input class="wait-input" type="number" min="0" placeholder="0" data-idx="'+i+'" data-field="wait" value="'+(stop.wait||'')+'">'
+          +'<span class="wait-unit">min'+(hasWait?' · '+fmtDur(stop.wait):'')+'</span>'
+          +'</div></div>';
+      }
 
-      return (
-        <div style={{ minHeight: "100vh", padding: "32px 16px" }}>
-          <div style={{ maxWidth: 560, margin: "0 auto" }}>
+      html += '</div>'; // stop-card
+    });
 
-            {/* Header */}
-            <div style={{ marginBottom: 32, textAlign: "center" }}>
-              <div style={{ fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "#4fc3f7", marginBottom: 8, fontWeight: 600 }}>
-                Road Trip Planner
-              </div>
-              <h1 style={{ fontSize: 26, fontWeight: 700, color: "#fff", letterSpacing: "-0.02em" }}>
-                Florida Day Trip
-              </h1>
-            </div>
+    html += '<button class="add-btn" id="add-btn">+ Add Stop</button>';
 
-            {/* Departure control */}
-            <div style={{
-              background: "rgba(79,195,247,0.08)", border: "1px solid rgba(79,195,247,0.25)",
-              borderRadius: 14, padding: "16px 20px", marginBottom: 20,
-              display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16
-            }}>
-              <div>
-                <div style={{ fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: "#4fc3f7", fontWeight: 600, marginBottom: 4 }}>
-                  Departure Time
-                </div>
-                <div style={{ fontSize: 22, fontWeight: 700, color: "#fff" }}>
-                  {toDisplay(departureMins)}
-                </div>
-              </div>
-              <input
-                type="time"
-                value={toInputValue(departureMins)}
-                onChange={e => setDepartureMins(toMinutes(e.target.value))}
-                style={{
-                  background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.15)",
-                  borderRadius: 8, padding: "8px 12px", color: "#fff", fontSize: 15, cursor: "pointer", outline: "none"
-                }}
-              />
-            </div>
+    html += '<div class="summary">'
+      +'<span>🚗 Drive: <strong>'+fmtDur(totalDrive)+'</strong></span>'
+      +(totalWait>0?'<span>⏱ Stops: <strong class="wait-total">'+fmtDur(totalWait)+'</strong></span>':'')
+      +'<span>🏁 Done: <strong class="done">'+toDisplay(arrivals[arrivals.length-1])+'</strong></span>'
+      +'</div>';
 
-            {/* Stops */}
-            <div>
-              {stops.map((stop, i) => {
-                const hasWait = (stop.wait || 0) > 0;
-                const isLast = i === stops.length - 1;
-                return (
-                  <div key={stop.id}>
-                    {/* Travel connector */}
-                    {i > 0 && (
-                      <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "4px 0", marginLeft: 40 }}>
-                        <div style={{
-                          width: 2, minHeight: 24, alignSelf: "stretch",
-                          background: "linear-gradient(to bottom, rgba(79,195,247,0.3), rgba(79,195,247,0.1))",
-                          borderRadius: 2, flexShrink: 0
-                        }} />
-                        <div style={{
-                          display: "flex", alignItems: "center", gap: 8,
-                          background: "rgba(255,255,255,0.04)", borderRadius: 20, padding: "4px 12px", fontSize: 12
-                        }}>
-                          <span>🚗</span>
-                          <input
-                            type="number" min={1} value={stop.travel}
-                            onChange={e => handleTravelChange(i, e.target.value)}
-                            style={{
-                              background: "transparent", border: "none", color: "#b0bec5",
-                              fontSize: 12, width: 36, textAlign: "center", outline: "none"
-                            }}
-                          />
-                          <span style={{ color: "#546e7a", fontSize: 11 }}>min drive</span>
-                          <span style={{ color: "#4fc3f7", fontSize: 11, fontWeight: 600 }}>{formatDuration(stop.travel)}</span>
-                        </div>
-                      </div>
-                    )}
+    document.getElementById('app').innerHTML = html;
+    attachEvents();
+  }
 
-                    {/* Stop card */}
-                    <div style={{
-                      background: i === 0 ? "rgba(79,195,247,0.06)" : "rgba(255,255,255,0.04)",
-                      border: i === 0 ? "1px solid rgba(79,195,247,0.2)" : "1px solid rgba(255,255,255,0.07)",
-                      borderRadius: 12, padding: "14px 16px", position: "relative"
-                    }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                        <div style={{
-                          width: 36, height: 36, borderRadius: "50%",
-                          background: i === 0 ? "rgba(79,195,247,0.15)" : "rgba(255,255,255,0.06)",
-                          display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0
-                        }}>
-                          {stop.icon}
-                        </div>
+  function attachEvents() {
+    document.getElementById('depart-input').addEventListener('change', function(e){
+      departMins = toMins(e.target.value); render();
+    });
 
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ fontSize: 10, color: "#546e7a", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 2 }}>
-                            {i === 0 ? "Start" : `Stop ${i}`}
-                          </div>
-                          <input
-                            value={stop.label}
-                            onChange={e => handleLabelChange(i, e.target.value)}
-                            style={{
-                              background: "transparent", border: "none", color: "#ecf0f1",
-                              fontSize: 13, fontWeight: 500, outline: "none", width: "100%", padding: 0
-                            }}
-                          />
-                        </div>
+    document.getElementById('add-btn').addEventListener('click', function(){
+      stops.push({id:Date.now(),label:"New Stop",travel:30,wait:0,icon:"📍",note:null});
+      render();
+    });
 
-                        <div style={{ textAlign: "right", flexShrink: 0 }}>
-                          <div style={{ fontSize: 10, color: "#546e7a", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 2 }}>
-                            {i === 0 ? "Depart" : "Arrive"}
-                          </div>
-                          <div style={{ fontSize: 18, fontWeight: 700, color: i === 0 ? "#4fc3f7" : "#fff", letterSpacing: "-0.02em" }}>
-                            {toDisplay(arrivals[i])}
-                          </div>
-                          {hasWait && i > 0 && (
-                            <div style={{ fontSize: 11, color: "#f59e0b", marginTop: 2 }}>
-                              Leave {toDisplay(departures[i])}
-                            </div>
-                          )}
-                        </div>
-                      </div>
+    document.getElementById('clear-waits').addEventListener('click', function(){
+      stops.forEach(function(s){ s.wait=0; });
+      render();
+    });
 
-                      {/* Remove button */}
-                      {i > 0 && (
-                        <button onClick={() => removeStop(i)} style={{
-                          position: "absolute", top: 8, right: 8,
-                          background: "transparent", border: "none",
-                          color: "#37474f", cursor: "pointer", fontSize: 14, padding: 2, lineHeight: 1
-                        }}>✕</button>
-                      )}
+    document.getElementById('refresh-btn').addEventListener('click', function(){
+      if(confirm("Reset all stops and times to defaults?")) {
+        stops = deepClone(DEFAULT_STOPS);
+        departMins = 7*60;
+        render();
+      }
+    });
 
-                      {/* Wait time row */}
-                      {!isLast && (
-                        <div style={{
-                          marginTop: 10, paddingTop: 10, borderTop: "1px solid rgba(255,255,255,0.05)",
-                          display: "flex", alignItems: "center", gap: 10
-                        }}>
-                          <span style={{ fontSize: 12, color: "#546e7a" }}>⏱ Time at stop:</span>
-                          <div style={{
-                            display: "flex", alignItems: "center", gap: 6,
-                            background: hasWait ? "rgba(245,158,11,0.1)" : "rgba(255,255,255,0.04)",
-                            border: hasWait ? "1px solid rgba(245,158,11,0.25)" : "1px solid transparent",
-                            borderRadius: 20, padding: "3px 10px"
-                          }}>
-                            <input
-                              type="number" min={0} value={stop.wait || ""} placeholder="0"
-                              onChange={e => handleWaitChange(i, e.target.value)}
-                              style={{
-                                background: "transparent", border: "none",
-                                color: hasWait ? "#f59e0b" : "#78909c",
-                                fontSize: 12, width: 36, textAlign: "center", outline: "none"
-                              }}
-                            />
-                            <span style={{ fontSize: 11, color: hasWait ? "#f59e0b" : "#546e7a" }}>
-                              min{hasWait ? ` · ${formatDuration(stop.wait)}` : ""}
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+    document.getElementById('app').addEventListener('change', function(e){
+      var el=e.target, idx=el.dataset.idx, field=el.dataset.field;
+      if(idx===undefined||!field) return;
+      idx=+idx;
+      if(field==='travel') stops[idx].travel=Math.max(1,parseInt(el.value)||1);
+      if(field==='wait')   stops[idx].wait=Math.max(0,parseInt(el.value)||0);
+      if(field==='label')  stops[idx].label=el.value;
+      render();
+    });
 
-            {/* Add stop */}
-            <button
-              onClick={addStop}
-              onMouseEnter={e => { e.target.style.borderColor = "rgba(79,195,247,0.3)"; e.target.style.color = "#4fc3f7"; }}
-              onMouseLeave={e => { e.target.style.borderColor = "rgba(255,255,255,0.12)"; e.target.style.color = "#546e7a"; }}
-              style={{
-                width: "100%", marginTop: 16, padding: "12px",
-                background: "transparent", border: "1px dashed rgba(255,255,255,0.12)",
-                borderRadius: 12, color: "#546e7a", fontSize: 13, cursor: "pointer"
-              }}
-            >+ Add Stop</button>
+    document.getElementById('app').addEventListener('click', function(e){
+      if(e.target.dataset.action==='remove'){
+        stops.splice(+e.target.dataset.idx,1); render();
+      }
+    });
+  }
 
-            {/* Summary */}
-            <div style={{
-              marginTop: 24, padding: "14px 20px",
-              background: "rgba(255,255,255,0.03)", borderRadius: 12,
-              border: "1px solid rgba(255,255,255,0.06)",
-              display: "flex", justifyContent: "space-between",
-              flexWrap: "wrap", gap: 8, fontSize: 12, color: "#546e7a"
-            }}>
-              <span>🚗 Drive: <strong style={{ color: "#b0bec5" }}>{formatDuration(totalDrive)}</strong></span>
-              {totalWait > 0 && (
-                <span>⏱ Stops: <strong style={{ color: "#f59e0b" }}>{formatDuration(totalWait)}</strong></span>
-              )}
-              <span>🏁 Done: <strong style={{ color: "#4fc3f7" }}>{toDisplay(arrivals[arrivals.length - 1])}</strong></span>
-            </div>
-
-          </div>
-        </div>
-      );
-    }
-
-    ReactDOM.createRoot(document.getElementById("root")).render(<TripPlanner />);
-  </script>
+  render();
+</script>
 </body>
 </html>
+4
