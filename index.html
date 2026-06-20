@@ -18,7 +18,7 @@
     .header { text-align: center; margin-bottom: 24px; }
     .header-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #4fc3f7; margin-bottom: 8px; font-weight: 600; }
     .header h1 { font-size: 26px; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
-    .header-saved { font-size: 10px; color: #37474f; margin-top: 6px; letter-spacing: 0.05em; }
+    .header-saved { font-size: 10px; color: #37474f; margin-top: 6px; }
 
     .toolbar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
     .tool-btn {
@@ -26,9 +26,8 @@
       background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
       border-radius: 10px; color: #90a4ae; font-size: 11px;
       cursor: pointer; font-family: inherit; transition: all 0.15s;
-      display: flex; align-items: center; justify-content: center; gap: 5px;
     }
-    .tool-btn:hover { background: rgba(255,255,255,0.09); color: #e0e0e0; border-color: rgba(255,255,255,0.2); }
+    .tool-btn:hover { background: rgba(255,255,255,0.09); color: #e0e0e0; }
     .tool-btn.danger:hover  { background: rgba(239,83,80,0.1);  color: #ef5350; border-color: rgba(239,83,80,0.3); }
     .tool-btn.refresh:hover { background: rgba(79,195,247,0.1); color: #4fc3f7; border-color: rgba(79,195,247,0.3); }
 
@@ -44,8 +43,6 @@
       border-radius: 8px; padding: 8px 12px; color: #fff; font-size: 15px; cursor: pointer; outline: none;
     }
     input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1); }
-
-    .stops-list { display: flex; flex-direction: column; gap: 0; }
 
     .connector { display: flex; align-items: center; gap: 10px; padding: 4px 0; margin-left: 52px; }
     .connector-line {
@@ -71,20 +68,16 @@
     }
     .stop-card.origin { background: rgba(79,195,247,0.06); border-color: rgba(79,195,247,0.2); }
 
-    /* Move buttons column */
-    .move-col {
-      display: flex; flex-direction: column; gap: 2px;
-      align-self: center; flex-shrink: 0;
-    }
+    .move-col { display: flex; flex-direction: column; gap: 2px; align-self: center; flex-shrink: 0; }
     .move-btn {
-      width: 24px; height: 24px; border-radius: 6px;
+      width: 26px; height: 26px; border-radius: 6px;
       background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
-      color: #546e7a; font-size: 12px; cursor: pointer;
+      color: #546e7a; font-size: 11px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: all 0.12s; line-height: 1; padding: 0;
+      transition: all 0.12s; user-select: none;
     }
-    .move-btn:hover:not(:disabled) { background: rgba(79,195,247,0.15); color: #4fc3f7; border-color: rgba(79,195,247,0.3); }
-    .move-btn:disabled { opacity: 0.15; cursor: default; }
+    .move-btn:hover { background: rgba(79,195,247,0.15); color: #4fc3f7; border-color: rgba(79,195,247,0.3); }
+    .move-btn.disabled { opacity: 0.15; pointer-events: none; }
 
     .stop-icon {
       width: 34px; height: 34px; border-radius: 50%;
@@ -102,45 +95,43 @@
       background: transparent; border: none; color: #ecf0f1;
       font-size: 13px; font-weight: 500; outline: none; width: 100%; padding: 0; font-family: inherit;
     }
-
-    .stop-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+    .stop-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
     .stop-times { text-align: right; }
     .time-label { font-size: 10px; color: #546e7a; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2px; }
-    .time-value { font-size: 17px; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+    .time-value { font-size: 17px; font-weight: 700; color: #fff; }
     .stop-card.origin .time-value { color: #4fc3f7; }
     .leave-time { font-size: 11px; color: #f59e0b; }
 
     .delete-btn {
-      background: transparent; border: none; color: #37474f;
-      cursor: pointer; font-size: 16px; padding: 0; line-height: 1;
-      transition: color 0.12s;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 6px; color: #37474f; cursor: pointer;
+      font-size: 13px; padding: 3px 6px; line-height: 1; transition: all 0.12s;
     }
-    .delete-btn:hover { color: #ef5350; }
+    .delete-btn:hover { background: rgba(239,83,80,0.12); color: #ef5350; border-color: rgba(239,83,80,0.3); }
 
     .wait-row {
       margin-top: 10px; padding-top: 10px;
       border-top: 1px solid rgba(255,255,255,0.05);
       display: flex; align-items: center; gap: 10px;
     }
-    .wait-label { font-size: 12px; color: #546e7a; }
-    .wait-input-wrap {
+    .wait-lbl { font-size: 12px; color: #546e7a; }
+    .wait-wrap {
       display: flex; align-items: center; gap: 6px;
       background: rgba(255,255,255,0.04); border: 1px solid transparent;
       border-radius: 20px; padding: 3px 10px; transition: all 0.2s;
     }
-    .wait-input-wrap.active { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.25); }
+    .wait-wrap.active { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.25); }
     .wait-input {
       background: transparent; border: none; color: #78909c;
       font-size: 12px; width: 36px; text-align: center; outline: none; font-family: inherit;
     }
-    .wait-input-wrap.active .wait-input { color: #f59e0b; }
+    .wait-wrap.active .wait-input { color: #f59e0b; }
     .wait-unit { font-size: 11px; color: #546e7a; }
-    .wait-input-wrap.active .wait-unit { color: #f59e0b; }
+    .wait-wrap.active .wait-unit { color: #f59e0b; }
 
     .note-row { margin-top: 8px; display: flex; align-items: flex-start; gap: 6px; }
-    .note-icon { font-size: 11px; margin-top: 1px; flex-shrink: 0; }
     .note-text { font-size: 11px; color: #78909c; line-height: 1.4; }
-    .note-link { color: #4fc3f7; text-decoration: none; font-size: 11px; border-bottom: 1px solid rgba(79,195,247,0.3); }
+    .note-link { color: #4fc3f7; text-decoration: none; border-bottom: 1px solid rgba(79,195,247,0.3); }
     .note-link:hover { color: #81d4fa; }
 
     .add-btn {
@@ -155,224 +146,207 @@
       background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);
       display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 12px; color: #546e7a;
     }
-    .summary strong     { color: #b0bec5; }
-    .summary .done      { color: #4fc3f7; }
-    .summary .wait-tot  { color: #f59e0b; }
+    .summary strong  { color: #b0bec5; }
+    .summary .done   { color: #4fc3f7; }
+    .summary .waits  { color: #f59e0b; }
   </style>
 </head>
 <body>
 <div id="app"></div>
+
 <script>
-  var DEFAULT_STOPS = [
-    { id:0, label:"Home",                                       travel:0,  wait:0, icon:"🏠", origin:true, note:null },
-    { id:1, label:"Miccosukee Service Plaza – Alligator Alley", travel:50, wait:0, icon:"🐊", note:null },
-    { id:2, label:"Tesla Supercharger – Miromar Outlets",       travel:65, wait:0, icon:"⚡", note:null },
-    { id:3, label:"Wellen Park Farmers Market",                 travel:70, wait:0, icon:"🌿",
-      note:{ text:"Open 9am – 1pm", url:"https://wellenpark.com/events/fresh-harvest-farmers-market/" } },
-    { id:4, label:"Taylor Morrison – Skye Ranch",               travel:35, wait:0, icon:"🏡", note:null },
-    { id:5, label:"Waterside Farmers Market",                   travel:26, wait:0, icon:"🥕",
-      note:{ text:"Open 11am – 2pm", url:"https://lakewoodranch.com/life-on-the-ranch/themarket/" } },
-    { id:6, label:"Art Ovation Hotel",                          travel:26, wait:0, icon:"🎨",
-      note:{ text:"Check-in from 4pm", url:"https://www.marriott.com/search/findHotels.mi?pageType=advanced&searchType=InCity&destinationAddress.latitude=27.336553&destinationAddress.longitude=-82.544847&destinationAddress.destination=Art+Ovation+Hotel+Autograph+Collection&nst=paid&cid=PAI_GLB0004YXD_GLE000BIM5_GLF000OETA&ppc=ppc&pId=ustbppc&gclsrc=aw.ds&gad_source=1&gad_campaignid=1658413573&gbraid=0AAAAADilnidrXYeNNxdkN67EbfvFvIKBq&gclid=CjwKCAjw9NjRBhATEiwA_p2J8clchucJLcykdWrPAORJqFP-7ViLeOug2_S2vufDTLIQvMb-gvMtEhoCbIEQAvD_BwE" } },
-  ];
+var DEFAULT_STOPS = [
+  { id:0, label:"Home",                                       travel:0,  wait:0, icon:"🏠", origin:true, note:null },
+  { id:1, label:"Miccosukee Service Plaza – Alligator Alley", travel:50, wait:0, icon:"🐊", note:null },
+  { id:2, label:"Tesla Supercharger – Miromar Outlets",       travel:65, wait:0, icon:"⚡", note:null },
+  { id:3, label:"Wellen Park Farmers Market",                 travel:70, wait:0, icon:"🌿",
+    note:{ text:"Open 9am – 1pm", url:"https://wellenpark.com/events/fresh-harvest-farmers-market/" }},
+  { id:4, label:"Taylor Morrison – Skye Ranch",               travel:35, wait:0, icon:"🏡", note:null },
+  { id:5, label:"Waterside Farmers Market",                   travel:26, wait:0, icon:"🥕",
+    note:{ text:"Open 11am – 2pm", url:"https://lakewoodranch.com/life-on-the-ranch/themarket/" }},
+  { id:6, label:"Art Ovation Hotel",                          travel:26, wait:0, icon:"🎨",
+    note:{ text:"Check-in from 4pm", url:"https://www.marriott.com/search/findHotels.mi?pageType=advanced&searchType=InCity&destinationAddress.latitude=27.336553&destinationAddress.longitude=-82.544847&destinationAddress.destination=Art+Ovation+Hotel+Autograph+Collection&nst=paid&cid=PAI_GLB0004YXD_GLE000BIM5_GLF000OETA&ppc=ppc&pId=ustbppc&gclsrc=aw.ds" }},
+];
 
-  function deepClone(a) { return JSON.parse(JSON.stringify(a)); }
+function clone(x){ return JSON.parse(JSON.stringify(x)); }
 
-  var STORAGE_KEY = 'floridaTripPlanner_v1';
-  function saveState() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({stops:stops,departMins:departMins})); } catch(e){}
+var KEY = 'floridaTrip_v2';
+var stops, dept;
+
+function load(){
+  try{
+    var d = JSON.parse(localStorage.getItem(KEY)||'null');
+    if(d && d.stops && d.stops.length){ stops=d.stops; dept=d.dept||420; return; }
+  }catch(e){}
+  stops=clone(DEFAULT_STOPS); dept=420;
+}
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify({stops:stops,dept:dept})); }catch(e){} }
+
+load();
+
+function mins2str(m){ var h=Math.floor(m/60)%24,mn=m%60,ap=h>=12?'pm':'am',dh=h%12||12; return dh+':'+String(mn).padStart(2,'0')+ap; }
+function str2mins(s){ var p=s.split(':'); return +p[0]*60+(+p[1]); }
+function toVal(m){ var h=Math.floor(m/60)%24,mn=m%60; return String(h).padStart(2,'0')+':'+String(mn).padStart(2,'0'); }
+function dur(m){ if(!m)return''; if(m<60)return m+' min'; var h=Math.floor(m/60),r=m%60; return r?h+' hr '+r+' min':h+' hr'; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+function times(){
+  var a=[],d=[];
+  for(var i=0;i<stops.length;i++){
+    if(i===0){ a.push(dept); d.push(dept+(stops[0].wait||0)); }
+    else{ var ar=d[i-1]+stops[i].travel; a.push(ar); d.push(ar+(stops[i].wait||0)); }
   }
-  function loadState() {
-    try {
-      var raw = localStorage.getItem(STORAGE_KEY);
-      if(raw){ var d=JSON.parse(raw); if(d.stops&&d.stops.length){ stops=d.stops; departMins=d.departMins||420; return; } }
-    } catch(e){}
-    stops=deepClone(DEFAULT_STOPS); departMins=420;
+  return {a:a,d:d};
+}
+
+function render(){
+  var T=times(), n=stops.length;
+  var tDrive=0, tWait=0;
+  for(var i=1;i<n;i++) tDrive+=stops[i].travel;
+  for(var i=0;i<n;i++) tWait+=(stops[i].wait||0);
+
+  var h='';
+  h+='<div class="header"><div class="header-label">Road Trip Planner</div><h1>Florida Day Trip</h1><div class="header-saved">💾 Auto-saved in this browser</div></div>';
+
+  h+='<div class="toolbar">'
+   +'<button class="tool-btn danger" id="btn-clear">🧹 Clear Waits</button>'
+   +'<button class="tool-btn refresh" id="btn-reset">↺ Reset</button>'
+   +'<button class="tool-btn" id="btn-update">⬇️ Check Updates</button>'
+   +'</div>';
+
+  h+='<div class="depart-box">'
+   +'<div><div class="depart-label">Departure Time</div><div class="depart-time">'+mins2str(dept)+'</div></div>'
+   +'<input type="time" id="inp-dept" value="'+toVal(dept)+'">'
+   +'</div>';
+
+  h+='<div id="stops-list">';
+  for(var i=0;i<n;i++){
+    var s=stops[i], hw=(s.wait||0)>0, last=(i===n-1);
+
+    if(i>0){
+      h+='<div class="connector"><div class="connector-line"></div>'
+       +'<div class="drive-pill">🚗 '
+       +'<input class="drive-input" type="number" min="1" data-i="'+i+'" data-f="travel" value="'+s.travel+'">'
+       +'<span class="drive-unit">min drive</span>'
+       +'<span class="drive-fmt">'+dur(s.travel)+'</span>'
+       +'</div></div>';
+    }
+
+    h+='<div class="stop-card'+(s.origin?' origin':'')+'">';
+
+    // Move col
+    if(!s.origin){
+      var upDis = (i<=1)?' disabled':'';
+      var dnDis = last?' disabled':'';
+      h+='<div class="move-col">'
+       +'<button class="move-btn'+(i<=1?' disabled':'')+'" data-act="up" data-i="'+i+'"'+(i<=1?' disabled':'')+'>▲</button>'
+       +'<button class="move-btn'+(last?' disabled':'')+'" data-act="dn" data-i="'+i+'"'+(last?' disabled':'')+'>▼</button>'
+       +'</div>';
+    } else {
+      h+='<div style="width:26px;flex-shrink:0"></div>';
+    }
+
+    h+='<div class="stop-icon">'+s.icon+'</div>';
+    h+='<div class="stop-body"><div class="stop-top">';
+    h+='<div class="stop-info"><div class="stop-num">'+(s.origin?'Start':'Stop '+i)+'</div>'
+     +'<input class="stop-label" type="text" data-i="'+i+'" data-f="label" value="'+esc(s.label)+'"></div>';
+
+    h+='<div class="stop-right"><div class="stop-times">'
+     +'<div class="time-label">'+(s.origin?'Depart':'Arrive')+'</div>'
+     +'<div class="time-value">'+mins2str(T.a[i])+'</div>'
+     +(hw&&!s.origin?'<div class="leave-time">Leave '+mins2str(T.d[i])+'</div>':'')
+     +'</div>'
+     +(!s.origin?'<button class="delete-btn" data-act="del" data-i="'+i+'">🗑</button>':'')
+     +'</div>';
+
+    h+='</div>'; // stop-top
+
+    if(s.note){
+      h+='<div class="note-row"><span style="font-size:11px;margin-top:1px">ℹ️</span>'
+       +'<span class="note-text">'+esc(s.note.text)+' — <a class="note-link" href="'+s.note.url+'" target="_blank" rel="noopener">More info ↗</a></span></div>';
+    }
+
+    if(!last){
+      h+='<div class="wait-row"><span class="wait-lbl">⏱ Time at stop:</span>'
+       +'<div class="wait-wrap'+(hw?' active':'')+'">'
+       +'<input class="wait-input" type="number" min="0" placeholder="0" data-i="'+i+'" data-f="wait" value="'+(s.wait||'')+'">'
+       +'<span class="wait-unit">min'+(hw?' · '+dur(s.wait):'')+'</span>'
+       +'</div></div>';
+    }
+
+    h+='</div></div>'; // stop-body, stop-card
   }
+  h+='</div>'; // stops-list
 
-  var stops, departMins;
-  loadState();
+  h+='<button class="add-btn" id="btn-add">+ Add Stop</button>';
+  h+='<div class="summary">'
+   +'<span>🚗 Drive: <strong>'+dur(tDrive)+'</strong></span>'
+   +(tWait?'<span>⏱ Stops: <strong class="waits">'+dur(tWait)+'</strong></span>':'')
+   +'<span>🏁 Done: <strong class="done">'+mins2str(T.a[n-1])+'</strong></span>'
+   +'</div>';
 
-  function toMins(hhmm){ var p=hhmm.split(':'); return +p[0]*60+(+p[1]); }
-  function toDisplay(m){ var h=Math.floor(m/60)%24,mn=m%60,ap=h>=12?'pm':'am',dh=h%12===0?12:h%12; return dh+':'+String(mn).padStart(2,'0')+ap; }
-  function toInputVal(m){ var h=Math.floor(m/60)%24,mn=m%60; return String(h).padStart(2,'0')+':'+String(mn).padStart(2,'0'); }
-  function fmtDur(m){ if(!m)return''; if(m<60)return m+' min'; var h=Math.floor(m/60),r=m%60; return r===0?h+' hr':h+' hr '+r+' min'; }
-  function escQ(s){ return String(s).replace(/"/g,'&quot;'); }
+  // Replace inner HTML, then wire up fresh listeners
+  var app = document.getElementById('app');
+  app.innerHTML = h;
 
-  function calcTimes(){
-    var arr=[],dep=[];
-    stops.forEach(function(s,i){
-      if(i===0){ arr.push(departMins); dep.push(departMins+(s.wait||0)); }
-      else { var a=dep[i-1]+s.travel; arr.push(a); dep.push(a+(s.wait||0)); }
-    });
-    return {arrivals:arr,departures:dep};
-  }
+  // ── Wire events onto the new DOM elements directly ──
 
-  function moveStop(idx, dir) {
-    var to = idx + dir;
-    if(to < 1 || to >= stops.length) return;
-    var tmp = stops[idx]; stops[idx] = stops[to]; stops[to] = tmp;
-    saveState(); render();
-  }
+  document.getElementById('btn-clear').onclick = function(){
+    stops.forEach(function(s){s.wait=0;}); save(); render();
+  };
+  document.getElementById('btn-reset').onclick = function(){
+    if(confirm('Reset all stops and times to defaults?')){
+      stops=clone(DEFAULT_STOPS); dept=420; save(); render();
+    }
+  };
+  document.getElementById('update-btn') && (document.getElementById('update-btn').onclick=null);
+  document.getElementById('btn-update').onclick = function(){
+    window.location.href=location.href.split('?')[0]+'?v='+Date.now();
+  };
+  document.getElementById('btn-add').onclick = function(){
+    stops.push({id:Date.now(),label:'New Stop',travel:30,wait:0,icon:'📍',note:null});
+    save(); render();
+  };
+  document.getElementById('inp-dept').onchange = function(){
+    dept=str2mins(this.value); save(); render();
+  };
 
-  function deleteStop(idx) {
-    if(idx === 0) return;
-    stops.splice(idx, 1);
-    saveState(); render();
-  }
+  // Move / delete / field buttons — attach directly to each element
+  var moveBtns = app.querySelectorAll('.move-btn:not([disabled])');
+  moveBtns.forEach(function(btn){
+    btn.onclick = function(){
+      var i = +this.getAttribute('data-i');
+      var act = this.getAttribute('data-act');
+      var to = act==='up' ? i-1 : i+1;
+      if(to<1||to>=stops.length) return;
+      var tmp=stops[i]; stops[i]=stops[to]; stops[to]=tmp;
+      save(); render();
+    };
+  });
 
-  function render(){
-    var t=calcTimes(), arrivals=t.arrivals, departures=t.departures;
-    var totalDrive=stops.slice(1).reduce(function(s,st){return s+st.travel;},0);
-    var totalWait=stops.reduce(function(s,st){return s+(st.wait||0);},0);
-
-    var html='<div class="header">'
-      +'<div class="header-label">Road Trip Planner</div>'
-      +'<h1>Florida Day Trip</h1>'
-      +'<div class="header-saved">💾 Auto-saved in this browser</div>'
-      +'</div>';
-
-    html+='<div class="toolbar">'
-      +'<button class="tool-btn danger" id="clear-waits">🧹 Clear Waits</button>'
-      +'<button class="tool-btn refresh" id="reset-btn">↺ Reset</button>'
-      +'<button class="tool-btn" id="update-btn">⬇️ Check Updates</button>'
-      +'</div>';
-
-    html+='<div class="depart-box">'
-      +'<div><div class="depart-label">Departure Time</div><div class="depart-time">'+toDisplay(departMins)+'</div></div>'
-      +'<input type="time" id="depart-input" value="'+toInputVal(departMins)+'">'
-      +'</div>';
-
-    html+='<div class="stops-list">';
-
-    stops.forEach(function(stop, i){
-      var hasWait=(stop.wait||0)>0, isLast=i===stops.length-1;
-      var isFirst = i===0;
-
-      // Drive connector
-      if(i>0){
-        html+='<div class="connector"><div class="connector-line"></div>'
-          +'<div class="drive-pill">🚗 '
-          +'<input class="drive-input" type="number" min="1" data-idx="'+i+'" data-field="travel" value="'+stop.travel+'">'
-          +'<span class="drive-unit">min drive</span>'
-          +'<span class="drive-fmt">'+fmtDur(stop.travel)+'</span>'
-          +'</div></div>';
+  var delBtns = app.querySelectorAll('.delete-btn');
+  delBtns.forEach(function(btn){
+    btn.onclick = function(){
+      var i = +this.getAttribute('data-i');
+      if(confirm('Remove "'+stops[i].label+'"?')){
+        stops.splice(i,1); save(); render();
       }
+    };
+  });
 
-      html+='<div class="stop-card'+(stop.origin?' origin':'')+'">';
+  var fields = app.querySelectorAll('[data-f]');
+  fields.forEach(function(el){
+    el.onchange = function(){
+      var i=+this.getAttribute('data-i'), f=this.getAttribute('data-f');
+      if(f==='travel') stops[i].travel=Math.max(1,parseInt(this.value)||1);
+      if(f==='wait')   stops[i].wait=Math.max(0,parseInt(this.value)||0);
+      if(f==='label')  stops[i].label=this.value;
+      save(); render();
+    };
+  });
+}
 
-      // Move column (up/down arrows) — hidden for origin
-      if(!stop.origin){
-        html+='<div class="move-col">'
-          +'<button class="move-btn" data-action="move" data-idx="'+i+'" data-dir="-1"'+(i<=1?' disabled':'')+'>▲</button>'
-          +'<button class="move-btn" data-action="move" data-idx="'+i+'" data-dir="1"'+(isLast?' disabled':'')+'>▼</button>'
-          +'</div>';
-      } else {
-        html+='<div style="width:24px;flex-shrink:0;"></div>';
-      }
-
-      // Icon
-      html+='<div class="stop-icon">'+stop.icon+'</div>';
-
-      // Body
-      html+='<div class="stop-body">';
-      html+='<div class="stop-top">';
-
-      // Info
-      html+='<div class="stop-info">'
-        +'<div class="stop-num">'+(stop.origin?'Start':'Stop '+i)+'</div>'
-        +'<input class="stop-label" type="text" data-idx="'+i+'" data-field="label" value="'+escQ(stop.label)+'">'
-        +'</div>';
-
-      // Times + delete
-      html+='<div class="stop-right">'
-        +'<div class="stop-times">'
-        +'<div class="time-label">'+(stop.origin?'Depart':'Arrive')+'</div>'
-        +'<div class="time-value">'+toDisplay(arrivals[i])+'</div>'
-        +(hasWait&&!stop.origin?'<div class="leave-time">Leave '+toDisplay(departures[i])+'</div>':'')
-        +'</div>'
-        +(!stop.origin?'<button class="delete-btn" data-action="delete" data-idx="'+i+'" title="Remove stop">🗑</button>':'')
-        +'</div>';
-
-      html+='</div>'; // stop-top
-
-      // Note
-      if(stop.note){
-        html+='<div class="note-row"><span class="note-icon">ℹ️</span>'
-          +'<span class="note-text">'+stop.note.text
-          +' — <a class="note-link" href="'+stop.note.url+'" target="_blank" rel="noopener">More info ↗</a>'
-          +'</span></div>';
-      }
-
-      // Wait time
-      if(!isLast){
-        html+='<div class="wait-row"><span class="wait-label">⏱ Time at stop:</span>'
-          +'<div class="wait-input-wrap'+(hasWait?' active':'')+'">'
-          +'<input class="wait-input" type="number" min="0" placeholder="0" data-idx="'+i+'" data-field="wait" value="'+(stop.wait||'')+'">'
-          +'<span class="wait-unit">min'+(hasWait?' · '+fmtDur(stop.wait):'')+'</span>'
-          +'</div></div>';
-      }
-
-      html+='</div></div>'; // stop-body, stop-card
-    });
-
-    html+='</div>'; // stops-list
-
-    html+='<button class="add-btn" id="add-btn">+ Add Stop</button>';
-
-    html+='<div class="summary">'
-      +'<span>🚗 Drive: <strong>'+fmtDur(totalDrive)+'</strong></span>'
-      +(totalWait>0?'<span>⏱ Stops: <strong class="wait-tot">'+fmtDur(totalWait)+'</strong></span>':'')
-      +'<span>🏁 Done: <strong class="done">'+toDisplay(arrivals[arrivals.length-1])+'</strong></span>'
-      +'</div>';
-
-    document.getElementById('app').innerHTML = html;
-    attachEvents();
-  }
-
-  function attachEvents(){
-    document.getElementById('depart-input').addEventListener('change', function(e){
-      departMins=toMins(e.target.value); saveState(); render();
-    });
-    document.getElementById('add-btn').addEventListener('click', function(){
-      stops.push({id:Date.now(),label:'New Stop',travel:30,wait:0,icon:'📍',note:null}); saveState(); render();
-    });
-    document.getElementById('clear-waits').addEventListener('click', function(){
-      stops.forEach(function(s){s.wait=0;}); saveState(); render();
-    });
-    document.getElementById('reset-btn').addEventListener('click', function(){
-      if(confirm('Reset all stops and times to defaults?')){
-        stops=deepClone(DEFAULT_STOPS); departMins=420; saveState(); render();
-      }
-    });
-    document.getElementById('update-btn').addEventListener('click', function(){
-      window.location.href=window.location.href.split('?')[0]+'?v='+Date.now();
-    });
-
-    // Delegated events for buttons and inputs
-    document.getElementById('app').addEventListener('click', function(e){
-      var el = e.target;
-      var action = el.dataset.action;
-      var idx = +el.dataset.idx;
-      if(action==='move'){
-        moveStop(idx, +el.dataset.dir);
-      } else if(action==='delete'){
-        if(confirm('Remove "'+stops[idx].label+'"?')){ deleteStop(idx); }
-      }
-    });
-
-    document.getElementById('app').addEventListener('change', function(e){
-      var el=e.target, idx=el.dataset.idx, field=el.dataset.field;
-      if(idx===undefined||!field) return;
-      idx=+idx;
-      if(field==='travel') stops[idx].travel=Math.max(1,parseInt(el.value)||1);
-      if(field==='wait')   stops[idx].wait=Math.max(0,parseInt(el.value)||0);
-      if(field==='label')  stops[idx].label=el.value;
-      saveState(); render();
-    });
-  }
-
-  render();
+render();
 </script>
 </body>
 </html>
